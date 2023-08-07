@@ -17,7 +17,7 @@ int main() {
 
   std::cout << "End:   \"fopencv-main.exe\".\n";
   std::cerr << "End:   \"fopencv-main.exe\".\n";
-  // TODO: 
+  // TODO: ファイル名出力のリファクタリング
   // __FILE__から、"\"が最後に出てくる場所を探して、
   // その地点から後ろを持ってくれば、fopencv-main.cを確保できる。
   // そこから、fopencv-main.cをfopencv-main.exeに置換すれば、
