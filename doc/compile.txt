@@ -1,0 +1,179 @@
+# usage
+g++ [options] file...
+
+# precompile
+g++ -std=c++20 -Wall -pedantic-errors -x c++-header -o *.h.gch *.h
+↓抽象化すると
+g++ [options] *.h
+↓[options]を展開、オプションのまとまりごとにカンマをつける。
+-std=c++20, -Wall, -pedantic-errors, -x c++-header, -o *.h.gch
+※-x c++-headerを使用しない場合に限り、入力ファイルをg++の直後に置いて良い。
+
+* how to make exe file from obj files.
+'''
+g++ -o out test2.o mylib.o
+'''
+
+* -c means it does not make exe file, only make obj file.
+
+* -o <file> means it output the file named <file>.
+
+* -x <language> means Specify rhe language of the following input files.
+
+"-g", 
+"${file}", "${workspaceFolder}\\include\\mtrand.c", "${workspaceFolder}\\include\\kfcomp2013.c", 
+"-I", "${workspaceFolder}\\include", "-o", "${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe",
+"-O1", "-Wall", "-Wextra", "-mtune=native", "-mfpmath=both", "-Warray-bounds", "-march=native", "-pedantic-errors",
+
+// https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc.pdf
+// 3.1 Option Summary 
+// from p. 32
+// 1. Overall options
+// 2. C language options
+// 3. C++ language options
+// from p. 76
+// from p. 80
+// 4. Diagnostic message formatting options
+// -fdiagnostics-color=always
+// from p. 92
+// 5. warning options
+
+// The following options do not enable specific warnings but control the kinds of diagnostics.
+// -Werror: Make all warning into errors
+// -Werror=<*>: Make the specified warning into an error.
+//              This switch takes a negative form, to be used to
+//              negate -Werror for specific warnings; for example -Wno-error=switch makes
+//              -Wswitch warnings not be errors, even when -Werror is in effect.
+// -Wfatal-errors: This option causes the compiler to abort compilation on the first error occurred
+//                 rather than trying to keep going and printing further error messages.
+
+// Some options, such as -Wall and -Wextra, turn on other options, such as -Wunused,
+// which may turn on further options, such as -Wunused-value. 
+// -Wpedantic
+// -pedantic-errors: This is not equivalent to -Werror=pedantic
+// -Wall: See p. 94
+// -Wextra: This enables some extra warning flags that are not enabled by -Wall.
+// -Wformat=2: -Wformat(=1) is enabled by -Wall, but this is not.
+// -Wformat-overflow=2: -Wformat-overflow(=1) is enabled by -Wformat.
+// -Wformat-nonliteral: Use with -Wformat
+// -Wformat-security: Use with -Wformat
+// -Wformat-signedness: Use with -Wformat
+// -Wformat-truncation=2: level 1 is enabled by -Wformat
+// -Wformat-y2k: Use with -Wformat.
+// -Wnull-dereference: This option is only active when -fdeletenull-pointer-checks is active, which is enabled by optimizations in most targets. The precision of the warnings depends on the optimization options used.
+// -Winit-self: Use with the -Wuninitialized.
+// -Wimplicit-fallthrough=5: https://www.loose-info.com/main/varioustests/gcc/test0036/case0022.html
+// -Wshift-overflow=2
+// -Wswitch-default
+// -Wswitch-enum: 無くて良いかも
+// -Wsync-nand
+// -Wtrivial-auto-var-init: 良く分からん
+// -Wunused-but-set-parameter: This warning is also enabled by -Wunused together with -Wextra.
+//                             To suppress this warning use the unused attribute.
+// -Wunused-parameter
+// -Wunused-const-variable=2
+// -Wuninitialized
+// -Wstrict-aliasing: See pp. 115, 200. Use with -fstrict-aliasing.
+// -Wstringop-overflow=4
+// -Wstrict-flex-arrays
+// -Walloc-zero
+// -Walloca
+// -Warith-conversion
+// -Wduplicated-branches
+// -Wduplicated-cond
+// -Wtrampolines
+// -Wfloat-equal
+// -Wshadow
+// -Wshadow=local
+// -Wunsafe-loop-optimizations
+// -Wundef
+// -Wunused-macros: p. 132
+// TODO: 2023/08/07最新の終了, 次回p. 133から
+
+// 6. static analyzer options
+// 6-1. C and Objective-C-only warning options
+// 7. Debugging options
+// 8. Optimization options
+// 9. program instrumentation options
+// 10. preprocessor options
+// 11. assembler options
+// 12. linker options
+// 13. directory options
+// 14. code generation options
+// 15. developer options
+// 16. machine dependent options
+// up to p. 308
+
+
+// Tips
+// -Wunused-value: Warn whenever a statement computes a result that is explicitly not used. To
+//               : suppress this warning cast the unused expression to void. This includes an
+//               : expression-statement or the left-hand side of a comma expression that contains
+//               : no side effects. For example, an expression such as x[i,j] causes a warning,
+//               : while x[(void)i,j] does not.
+// -Wmaybe-uninitialized: p. 115
+// -Wstrict-overflow=4: =5 gives a very large number of false positives. Use up to 4.
+//                    : よくよく考えたけど、整数オーバーフローはコンパイラじゃなくて、プログラマが
+//                    : 抑制すべき課題じゃね？そうでない場合、コードが冗長になり過ぎる。
+// -Walloc-size-larger-than=: p. 121
+// -Warray-bounds=: =2 may give a larget number of false positives. =1 is in -Wall.
+// -Warray-parameter: void f (int[static 4]); <- array argument must have static.
+// 
+
+// TODO
+// -ftree-vrp
+// -fstrict-flex-arrays=
+// -Wvla-parameter
+// -funsafe-loop-optimizations
+
+// questions
+// -Wattribute-alias
+// -Wbidi-chars
+// -Wsystem-headers
+// -Wdeclaration-after-statement
+
+// スタックサイズを確認する用
+// "-fstack-usage",
+// コンパイルが重くなるかも
+// "-Warray-bounds",
+// if -march=native is working, __BIGGEST_ALIGNMENT__ == 16 is changed to 32
+"-march=native",
+"-pedantic-errors",
+// https://qnighy.hatenablog.com/entry/2015/09/26/192104#fn-2140d15d
+// https://stackoverflow.com/questions/5088460/flags-to-enable-thorough-and-verbose-g-warnings/9862800#9862800
+//"-pedantic",
+"-Wcast-align",
+"-Wcast-qual",
+//"-Wctor-dtor-privacy",
+"-Wdisabled-optimization",
+"-Wformat=2",
+"-Winit-self",
+"-Wlogical-op",
+"-Wmissing-declarations",
+"-Wmissing-include-dirs",
+//"-Wnoexcept",
+//"-Wold-style-cast",
+//"-Woverloaded-virtual",
+"-Wredundant-decls",
+"-Wshadow",
+"-Wsign-conversion",
+//"-Wsign-promo",
+//"-Wstrict-null-sentinel",
+//=2のときに、
+//assuming signed overflow does not occur when changing X +- C1 cmp C2 to X cmp C2 -+ C1
+//は発生しない。
+//=4にすると、for (int d = 0; d <= n - 1; ++d) {でのassuming signed overflow does not occur when reducing constant in comparison
+//は発生しない。
+//基本は5にしとく。
+"-Wstrict-overflow=5",
+//なぜか上のやつは値を小さくすると警告が減るが、こっちは減ると厳しくなる。
+"-Wstrict-aliasing=1",
+//"-fno-strict-aliasing",
+"-Wswitch-default",
+"-Wundef",
+// warning to error
+//"-Werror",
+//"-Wno-unused",
+//gcc a.c mtrand.c kfcomp2013.c -o a.exe -O2 -lm -Wall -Wextra -march=native -pedantic-errors
+//gcc a.c ../include/mtrand.c ../include/kfcomp2013.c -I ../include  -o a.exe -O1 -lm -Wall -Wextra -march=native -pedantic-errors
+//*(int(*)[256])itxinf

@@ -1,0 +1,28 @@
+google_testのgtest.hと.ccを参照
+
+クラスの宣言と実装のファイル分割について
+
+文字数的にワンライナーで書ける場合、メンバ関数の実装は、.hに書く
+ワンライナーで書けないメンバ関数は、.ccで実装する
+
+// 基本的なクラス定義のフォーマットを以下に示します(
+//     コメントは省略しています。コメントについては、クラスのコメントで議論しています)
+
+class MyClass {
+ public:      // スペース1つでインデント！
+  MyClass();  // スペース2つでインデント(いつもの)
+  explicit MyClass(int var);
+  ~MyClass() {}
+
+  void SomeFunction();
+  void SomeFunctionThatDoesNothing() {}
+
+  void set_some_var(int var) { some_var_ = var; }
+  int some_var() const { return some_var_; }
+
+ private:
+  bool SomeInternalFunction();
+
+  int some_var_;
+  int some_other_var_;
+};
