@@ -1,17 +1,24 @@
 # usage
 g++ [options] file...
 
+以下<*>.hのような記載はsrc.hのような例に一致する。
+
 # precompile
-g++ -std=c++20 -Wall -pedantic-errors -x c++-header -o *.h.gch *.h
+g++ -std=c++20 -Wall -pedantic-errors -x c++-header -o <出力==入力ファイル名>.h.gch <入力ファイル名>.h
 ↓抽象化すると
-g++ [options] *.h
+g++ [options] <入力ファイル名>.h
 ↓[options]を展開、オプションのまとまりごとにカンマをつける。
 -std=c++20, -Wall, -pedantic-errors, -x c++-header, -o *.h.gch
-※-x c++-headerを使用しない場合に限り、入力ファイルをg++の直後に置いて良い。
+※-x c++-headerを使用しない場合に限り、入力ファイル（*.h）をg++の直後に置いて良い。
+
+# how to make obj files.
+'''
+g++ -std=c++20 -Wall -pedantic-errors -c -I include -o obj\\<出力ファイル名>.o <入力ファイル名>.c
+'''
 
 * how to make exe file from obj files.
 '''
-g++ -o out test2.o mylib.o
+g++ -o <出力ファイル名> <入力ファイル名1>.o <入力ファイル名2>.o
 '''
 
 * -c means it does not make exe file, only make obj file.
