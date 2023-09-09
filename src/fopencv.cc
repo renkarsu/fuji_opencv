@@ -13,8 +13,8 @@ FOpencv::~FOpencv() {
 }
 
 // static メンバの実装では、static付けなくてよい
-size_t FOpencv::safe_size(const unsigned int dx, const unsigned int dy,
-                          const unsigned int dz, const unsigned int dc) {
+size_t FOpencv::safe_size(const unsigned dx, const unsigned dy,
+                          const unsigned dz, const unsigned dc) {
   if (!(dx && dy && dz && dc)) return 0;
   size_t siz = (size_t)dx, osiz = siz;
   if ((dy == 1 || (siz *= dy) > osiz) &&
